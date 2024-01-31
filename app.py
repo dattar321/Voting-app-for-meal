@@ -48,6 +48,13 @@ class MenuHistory(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
 
+class Vote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
+    menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user = db.relationship('Employee', backref='votes')
+    menu = db.relationship('Menu', backref='votes')
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
@@ -100,20 +107,32 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 @login_required
 def vote():
+    btn = 1
+    user_id = current_user.id
+    last_vote = Vote.query.filter_by(user_id=user_id).order_by(Vote.timestamp.desc()).first()
+    if last_vote:
+        if last_vote or (datetime.utcnow() - last_vote.timestamp).total_seconds() < 86400:
+            btn = 0
     restaurants,all_menus,highest_voted_menu = get_restaurant_and_menus()
-    return render_template('vote.html', user=current_user.username, restaurants=restaurants, all_menus=all_menus, selected_menu = highest_voted_menu)
+    return render_template('vote.html', user=current_user.username, restaurants=restaurants, all_menus=all_menus, selected_menu = highest_voted_menu,btn=btn)
 
 
 @app.route('/submit-vote', methods=['POST'])
 def submit_vote():
     restaurants,all_menus,_ = get_restaurant_and_menus()
+    user_id = current_user.id
     menu_id = request.form.get('selectedMenuId')
-    selected_menu = Menu.query.get(menu_id)
-    if selected_menu:
-        selected_menu.vote = selected_menu.vote + 1
-        db.session.commit()
-        highest_voted_menu = Menu.query.order_by(Menu.vote.desc()).first().name
-        return render_template('vote.html', user=current_user.username, restaurants=restaurants, all_menus=all_menus, selected_menu = highest_voted_menu)
+    last_vote = Vote.query.filter_by(user_id=user_id).order_by(Vote.timestamp.desc()).first()
+    if not last_vote or (datetime.utcnow() - last_vote.timestamp).total_seconds() > 86400:
+        selected_menu = Menu.query.get(menu_id)
+        if selected_menu:
+            selected_menu.vote = selected_menu.vote + 1
+            new_vote = Vote(user_id=user_id, menu_id=menu_id)
+            db.session.add(new_vote)
+            db.session.commit()
+    highest_voted_menu_id = MenuHistory.query.order_by(MenuHistory.id.desc()).first().menu_id
+    highest_voted_menu = Menu.query.filter_by(id=highest_voted_menu_id).first().name
+    return render_template('vote.html', user=current_user.username, restaurants=restaurants, all_menus=all_menus, selected_menu = highest_voted_menu,btn=0)
     return redirect(url_for('vote'))
 
 
@@ -171,11 +190,15 @@ def mealConfirm():
         first = MenuHistory.query.order_by(MenuHistory.datetime.desc()).first().restaurant_id
         second = MenuHistory.query.order_by(MenuHistory.datetime.desc()).offset(1).first().restaurant_id
         if first and second and first == second and first == highest_voted_menu.restaurant_id:
+            highest_voted_menu.vote = 0
             highest_voted_menu = Menu.query.order_by(Menu.vote.desc()).offset(1).first()
         new_menu_history = MenuHistory(datetime=today_date, menu_id=highest_voted_menu.id, restaurant_id=highest_voted_menu.restaurant_id)
         db.session.add(new_menu_history)
         db.session.commit()
-    return render_template('mealconfirm.html',menu = highest_voted_menu.name)
+    else:
+        highest_voted_menu_id = MenuHistory.query.order_by(MenuHistory.id.desc()).first().menu_id
+        highest_voted_menu = Menu.query.filter_by(id=highest_voted_menu_id).first().name
+    return render_template('mealconfirm.html',menu = highest_voted_menu)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -185,7 +208,8 @@ def logout():
 
 def get_restaurant_and_menus():
     restaurants = Restaurant.query.all()
-    highest_voted_menu = Menu.query.order_by(Menu.vote.desc()).first().name
+    highest_voted_menu_id = MenuHistory.query.order_by(MenuHistory.id.desc()).first().menu_id
+    highest_voted_menu = Menu.query.filter_by(id=highest_voted_menu_id).first().name
     all_menus = {}
 
     for restaurant in restaurants:

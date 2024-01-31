@@ -1,35 +1,146 @@
-# Voting App
+# Voting App for Meal
 
-A simple voting app built with Flask.
+## Overview
+This Flask-based web application enables users to vote for their preferred meals from different restaurants. Users can register, log in, vote for meals, and view the current highest-voted meal. The application also includes an admin panel for managing restaurants and menus.
 
 ## Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/Voting-App.git
+    cd Voting-App
+    ```
 
-   `git clone https://github.com/dattar321/Voting-app-for-meal.git && cd yourproject`
+2. **Create a virtual environment:**
+    ```bash
+    python -m venv venv
+    ```
 
-2. Create a virtual environment (optional but recommended):
+3. **Activate the virtual environment:**
+    - On Windows:
+        ```bash
+        venv\Scripts\activate
+        ```
+    - On macOS/Linux:
+        ```bash
+        source venv/bin/activate
+        ```
 
-   `python -m venv venv`
+4. **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-3. Activate the virtual environment:
+## Database Setup
 
-   - On Windows:
+1. **Open a Python shell:**
+    ```bash
+    python
+    ```
 
-     `venv\Scripts\activate`
+2. **Inside the Python shell, create the database:**
+    ```python
+    from your_app import db
+    db.create_all()
+    exit()
+    ```
+## Database Schema
 
-   - On Unix or MacOS:
+### Employee Table
 
-     `source venv/bin/activate`
+- **Columns:**
+    - `id`: Integer, Primary Key
+    - `username`: String(20), Unique, Not Null
+    - `password`: String(80), Not Null
 
-4. Install the required packages:
+### Restaurant Table
 
-   `pip install -r requirements.txt`
+- **Columns:**
+    - `id`: Integer, Primary Key
+    - `name`: String(50), Unique, Not Null
+    - `streak`: Integer, Default: 0
+
+- **Relationships:**
+    - One-to-Many with `Menu` table (Backref: `restaurant.menus`)
+
+### Menu Table
+
+- **Columns:**
+    - `id`: Integer, Primary Key
+    - `date`: Date, Default: Current Date
+    - `name`: String(80), Unique, Not Null
+    - `vote`: Integer, Default: 0
+    - `description`: String(255), Not Null
+    - `restaurant_id`: Integer, Foreign Key (References: `restaurant.id`), Not Null
+
+- **Relationships:**
+    - One-to-Many with `Vote` table (Backref: `menu.votes`)
+    - Many-to-One with `Restaurant` table (Backref: `menu.restaurant`)
+
+### MenuHistory Table
+
+- **Columns:**
+    - `id`: Integer, Primary Key
+    - `datetime`: DateTime, Default: Current Datetime
+    - `menu_id`: Integer, Foreign Key (References: `menu.id`), Not Null
+    - `restaurant_id`: Integer, Foreign Key (References: `restaurant.id`), Not Null
+
+- **Relationships:**
+    - Many-to-One with `Menu` table (Backref: `menu_history.menu`)
+    - Many-to-One with `Restaurant` table (Backref: `menu_history.restaurant`)
+
+### Vote Table
+
+- **Columns:**
+    - `id`: Integer, Primary Key
+    - `datetime`: DateTime, Default: Current Datetime, Not Null
+    - `menu_id`: Integer, Foreign Key (References: menu.id), Not Null
+    - `restaurant_id`: Integer, Foreign Key (References: restaurant.id), Not Null
+
+## Relationships
+
+- **`Employee` and `MenuHistory`:**
+    - No direct relationship between these tables.
+
+- **`Employee` and `Restaurant`:**
+    - No direct relationship between these tables.
+
+- **`Employee` and `Menu`:**
+    - No direct relationship between these tables.
+
+- **`Menu` and `MenuHistory`:**
+    - No direct relationship between these tables.
+
+## Database File
+
+- The SQLite database file is created based on the `app.py` configuration.
 
 ## Usage
 
-1. Run the application:
+1. **Run the application:**
+    ```bash
+    python your_app.py
+    ```
 
-   `python app.py`
+2. **Open your web browser and go to [http://localhost:5000](http://localhost:5000)**
 
-2. Open your browser and go to [http://localhost:5000](http://localhost:5000).
+3. **Register a new account, log in, and start voting!**
+
+## Admin Panel
+
+To access the admin panel:
+
+1. Log in with username: admin@bs23.com and password: 123456
+2. Navigate to [http://localhost:5000/admin](http://localhost:5000/admin)
+3. Manage restaurants and menus.
+
+## Scheduled Task
+
+The application has a scheduled task that resets votes every 24 hours, ensuring a fresh start for the voting system.
+
+## Future Scope
+
+- Implement user roles and permissions for better admin control.
+- Enhance the UI/UX design for a more intuitive user experience.
+- Add features like user profile management.
+- Enhance security measures, such as using HTTPS.

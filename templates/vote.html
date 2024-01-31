@@ -78,7 +78,7 @@
 
 
     <div class="card selected-food"> 
-        <h4>Most Voted Food</h4>
+        <h4>Today's Menu</h4>
         <p">{{selected_menu}}</p>
     </div>
     <div class = "card" style="text-align: center;">
@@ -101,11 +101,14 @@
             {% endfor %}
         </div>
     {% endfor %}
-
-<form id="voteForm" action="/submit-vote" method="post">
-    <input type="hidden" name="selectedMenuId" id="selectedMenuId">
-    <button type="submit" class="submit-button">Submit Vote</button>
-</form>
+    {% if btn == 1 %}
+    <form id="voteForm" action="/submit-vote" method="post">
+        <input type="hidden" name="selectedMenuId" id="selectedMenuId">
+        <button type="submit" class="submit-button">Submit Vote</button>
+    </form>
+    {% else %}
+        <button class="submit-button">You've already voted for this day</button>
+    {% endif %}
     
     </div>
     

@@ -7,9 +7,16 @@
     <style>
         .card{
             width: 700px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
+            margin: 0 auto;
+        }
+        .selected-food{
+            margin-top: 15px;
+            background-color: #dee5f1;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
         .restaurant-section {
             border: 1px solid #ddd;
@@ -43,6 +50,12 @@
         .submit-button:hover {
             background-color: #0056b3;
         }
+        a:hover{
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -53,33 +66,49 @@
     <div class="sub-header" style="background-color: #f8f9fa; color: #007bff; padding: 10px; text-align: center; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
         <h3 style="margin: 0;">Voting App for Meal</h3>
         <div style="float: right;">
-            <span style="margin-right: 10px;">{{user}}</span>
+            {% if user=='admin@bs23.com' %}
+                <a href="{{url_for('admin')}}" style="text-decoration: none;">Admin panel</a>
+            {% else %}
+                <span style="margin-right: 10px;">{{user}}</span>
+            {% endif %}
+            
+            
+            
             <a href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
         </div>
         <div style="clear: both;"></div>
     </div>
 
+
+    <div class="card selected-food"> 
+        <h4>Most Voted Food</h4>
+        <p">{{selected_menu}}</p>
+    </div>
     <div class = "card" style="text-align: center;">
         <h2>Vote for your Meal!</h2>
     
         {% for restaurant in restaurants %}
-            <div class="restaurant-section">
-                <h3>{{ restaurant.name }}</h3>
-                
-                {% for menu in all_menus[restaurant.id] %}
-                    <div class="menu-card">
-                        <div style="float: left;">
-                            <p>{{ menu.name }}</p>
-                        </div>
-                        <div style="float: right;">
-                            <p>{{ menu.description }}</p>
-                        </div>
-                        <div style="clear: both;"></div>
+        <div class="restaurant-section">
+            <h3>{{ restaurant.name }}</h3>
+            
+            {% for menu in all_menus[restaurant.id] %}
+                <div class="menu-card" data-menu-id="{{ menu.id }}">
+                    <div style="float: left;">
+                        <p>{{ menu.name }}</p>
                     </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-        <button class="submit-button" type="submit">Submit Vote</button>
+                    <div style="float: right;">
+                        <p>{{ menu.description }}</p>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+<form id="voteForm" action="/submit-vote" method="post">
+    <input type="hidden" name="selectedMenuId" id="selectedMenuId">
+    <button type="submit" class="submit-button">Submit Vote</button>
+</form>
     
     </div>
     
@@ -90,11 +119,14 @@
             menuCards.forEach(function (card) {
                 card.addEventListener('click', function () {
                     menuCards.forEach(function (otherCard) {
-                        if (otherCard !== card) {
-                            otherCard.classList.remove('selected');
-                        }
+                        otherCard.classList.remove('selected');
                     });
-                    card.classList.toggle('selected');
+                    card.classList.add('selected');
+    
+                    // Update the hidden input value with the selected menu ID
+                    var selectedMenuIdInput = document.getElementById('selectedMenuId');
+                    selectedMenuIdInput.value = card.getAttribute('data-menu-id');
+                    console.log(selectedMenuIdInput.value);
                 });
             });
         });

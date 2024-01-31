@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <style>
+        .link-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link-box {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 20px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: box-shadow 0.3s, background-color 0.3s;
+        }
+
+        .link-box:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="background-color: #007bff; color: #fff; padding: 10px; text-align: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+        <h2 style="margin: 0;">Brainstation 23 PLC</h2>
+    </div>
+
+    <div class="sub-header" style="background-color: #f8f9fa; color: #007bff; padding: 10px; text-align: center; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
+        <h3 style="margin: 0;">Voting App for Meal</h3>
+        <div style="float: right;">
+            <a href="" style="text-decoration: none;">Admin panel</a>
+            <a href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="link-container">
+        <div class="link-box">
+            <a href="{{ url_for('addRestaurant') }}" style="text-decoration: none; color: #007bff;">Add restaurant</a>
+        </div>
+        <br>
+        <div class="link-box">
+            <a href="{{ url_for('addMenu') }}" style="text-decoration: none; color: #007bff;">Add Menu</a>
+        </div>
+    </div>
+</body>
+</html>

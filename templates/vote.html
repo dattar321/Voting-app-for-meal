@@ -67,13 +67,10 @@
         <h3 style="margin: 0;">Voting App for Meal</h3>
         <div style="float: right;">
             {% if user=='admin@bs23.com' %}
-                <a href="{{url_for('admin')}}" style="text-decoration: none;">Admin panel</a>
+                <a href="{{url_for('admin')}}" style="color: #007bff;text-decoration: none;">Admin panel</a>
             {% else %}
-                <span style="margin-right: 10px;">{{user}}</span>
+                <span style="color: #007bff; margin-right: 10px;">{{user}}</span>
             {% endif %}
-            
-            
-            
             <a href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
         </div>
         <div style="clear: both;"></div>
@@ -115,18 +112,14 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var menuCards = document.querySelectorAll('.menu-card');
-    
             menuCards.forEach(function (card) {
                 card.addEventListener('click', function () {
                     menuCards.forEach(function (otherCard) {
                         otherCard.classList.remove('selected');
                     });
                     card.classList.add('selected');
-    
-                    // Update the hidden input value with the selected menu ID
                     var selectedMenuIdInput = document.getElementById('selectedMenuId');
                     selectedMenuIdInput.value = card.getAttribute('data-menu-id');
-                    console.log(selectedMenuIdInput.value);
                 });
             });
         });

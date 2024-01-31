@@ -24,6 +24,12 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             background-color: #f0f0f0;
         }
+        .header-a:hover {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -34,12 +40,17 @@
     <div class="sub-header" style="background-color: #f8f9fa; color: #007bff; padding: 10px; text-align: center; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
         <h3 style="margin: 0;">Voting App for Meal</h3>
         <div style="float: right;">
-            <a href="" style="text-decoration: none;">Admin panel</a>
-            <a href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
+            <a class="header-a" href="{{url_for('vote')}}" style="color: #007bff; text-decoration: none;">Home</a>
+            <a class="header-a" href="" style="color: #007bff;text-decoration: none;">Admin panel</a>
+            <a class="header-a" href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
         </div>
         <div style="clear: both;"></div>
     </div>
     <div class="link-container">
+        <div class="link-box">
+            <a href="{{ url_for('mealConfirm') }}" style="text-decoration: none; color: #007bff;">Confirm Meal</a>
+        </div>
+        <br>
         <div class="link-box">
             <a href="{{ url_for('addRestaurant') }}" style="text-decoration: none; color: #007bff;">Add restaurant</a>
         </div>
@@ -50,3 +61,4 @@
     </div>
 </body>
 </html>
+

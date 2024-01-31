@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Menu</title>
+    <style>
+        .dropdown {
+            text-align: center;
+            margin: 0 auto;
+            width: 300px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+        }
+        .form-container {
+            padding: 20px;
+            padding-top: 50px;
+            text-align: center;
+        }
+        .form-description{
+            height: 120px;
+        }
+        input[type="text"] {
+            width: 400px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius:5px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        .header-a:hover{
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="background-color: #007bff; color: #fff; padding: 10px; text-align: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
+        <h2 style="margin: 0;">Brainstation 23 PLC</h2>
+    </div>
+
+    <div class="sub-header" style="background-color: #f8f9fa; color: #007bff; padding: 10px; text-align: center; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
+        <h3 style="margin: 0;">Voting App for Meal</h3>
+        <div style="float: right;">
+            <a class="header-a" href="{{url_for('vote')}}" style="color: #007bff; text-decoration: none;">Home</a>
+            <a class="header-a" href="{{url_for('admin')}}" style="color: #007bff;text-decoration: none;">Admin panel</a>
+            <a class="header-a" href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="form-container"> 
+        <form action="" method="POST">
+            <label for="{{ choices.dropdown.id }}">Select a Restaurant:</label>
+            <div class="dropdown">
+                {{ choices.dropdown(class="form-control") }}
+            </div>
+
+            <br>
+            {{ form.name }}
+            <br>
+            {{ form.description(class="form-description") }}
+            <br>
+            {{ form.submit }}
+        </form>
+    </div>
+
+</body>
+</html>

@@ -4,6 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vote </title>
+    <style>
+        .card{
+            width: 700px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .restaurant-section {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .menu-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .menu-card:hover {
+            background-color: lightgreen;
+        }
+        .menu-card.selected {
+            background-color: green;
+        }
+        .submit-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="header" style="background-color: #007bff; color: #fff; padding: 10px; text-align: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);">
@@ -12,12 +52,52 @@
 
     <div class="sub-header" style="background-color: #f8f9fa; color: #007bff; padding: 10px; text-align: center; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
         <h3 style="margin: 0;">Voting App for Meal</h3>
+        <div style="float: right;">
+            <span style="margin-right: 10px;">{{user}}</span>
+            <a href="{{url_for('logout')}}" style="color: #007bff; text-decoration: none;">logout</a>
+        </div>
+        <div style="clear: both;"></div>
     </div>
-    <div style="text-align: center;">
+
+    <div class = "card" style="text-align: center;">
         <h2>Vote for your Meal!</h2>
-        <p>just to let you know you are logged in !!!</p>
-        <a href="{{url_for('logout')}}">logout</a>
+    
+        {% for restaurant in restaurants %}
+            <div class="restaurant-section">
+                <h3>{{ restaurant.name }}</h3>
+                
+                {% for menu in all_menus[restaurant.id] %}
+                    <div class="menu-card">
+                        <div style="float: left;">
+                            <p>{{ menu.name }}</p>
+                        </div>
+                        <div style="float: right;">
+                            <p>{{ menu.description }}</p>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button class="submit-button" type="submit">Submit Vote</button>
+    
     </div>
     
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var menuCards = document.querySelectorAll('.menu-card');
+    
+            menuCards.forEach(function (card) {
+                card.addEventListener('click', function () {
+                    menuCards.forEach(function (otherCard) {
+                        if (otherCard !== card) {
+                            otherCard.classList.remove('selected');
+                        }
+                    });
+                    card.classList.toggle('selected');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

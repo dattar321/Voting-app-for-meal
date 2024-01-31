@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -26,6 +27,21 @@ class Employee(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
 
+class Restaurant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    streak = db.Column(db.Integer, default=0) 
+    menus = db.relationship('Menu', backref='restaurant', lazy=True)
+
+
+class Menu(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, default=datetime.now().date())
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
+
+
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=6, max=20)], render_kw={"placeholder": "Password"})
@@ -42,7 +58,7 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
-    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
+    password = PasswordField(validators=[InputRequired(), Length(min=6, max=20)], render_kw={"placeholder": "Password"})
     submit = SubmitField('Login')
 
 @app.route('/')
@@ -64,7 +80,16 @@ def login():
 @app.route('/vote', methods=['GET', 'POST'])
 @login_required
 def vote():
-    return render_template('vote.html')
+    restaurants = Restaurant.query.all()
+    all_menus = {}
+
+    for restaurant in restaurants:
+        menus = Menu.query.filter_by(restaurant_id=restaurant.id).all()
+        all_menus[restaurant.id] = menus
+
+    return render_template('vote.html', user=current_user.username, restaurants=restaurants, all_menus=all_menus)
+
+
 
 
 @ app.route('/register', methods=['GET', 'POST'])
@@ -85,9 +110,6 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-@app.route('/chicks')
-def chicks():
-    return "hello from bitches"
 
 if __name__ =='__main__':
     app.run(debug=True)

@@ -141,6 +141,5 @@ The application has a scheduled task that resets votes every 24 hours, ensuring 
 ## Future Scope
 
 - Implement user roles and permissions for better admin control.
-- Enhance the UI/UX design for a more intuitive user experience.
-- Add features like user profile management.
-- Enhance security measures, such as using HTTPS.
+- Add review system to menu
+- By keeping track of the vote we can find the overall demand of the employyes

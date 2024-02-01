@@ -138,6 +138,91 @@ To access the admin panel:
 
 The application has a scheduled task that resets votes every 24 hours, ensuring a fresh start for the voting system.
 
+## Architecture
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/6248c4a5-53bb-42c9-9e52-a2876c891626)
+
+
+## Application Overview
+
+
+The application starts with a login or register page:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/40b149f3-0f6f-4928-bd5d-b840f0ef5d71)
+
+To register a user, navigate to the register page. If already registered, proceed to the login page: 
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/12d125b2-28ec-409c-a54a-530d0b088dff)
+
+
+If attempting to register with a username that already exists, the user will stay on the register page. Upon successful registration, the user is redirected to the login page.
+
+After logging in, the home page fetches all available menus from the database to display on the page:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/b0cfd93e-1945-43b1-90fb-568a706bd5ed)
+
+
+At the top of the page, there is a section displaying today's selected food.A scheduler is implemented to reset the vote count to 0 after a specified period. If no votes are cast during this time, the system intelligently selects a random menu, ensuring a delightful dining experience for users. 
+The user's username and logout option are on the top-right corner.
+
+Menus can be selected on this page, and if selected, the card's color will turn green. A "Submit Vote" button is available at the bottom. However, if the user has already voted today, they won't be able to vote again:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/a1d7d46c-37cb-4b05-bd0c-0186ab71c1fc)
+
+After clicking the "Submit" button, the page will appear as follows:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/a8b8e3e1-565b-472a-91b2-a5d1309fe9a6)
+
+To access the admin panel, log in with the following credentials:
+
+- `Username: admin@bs23.com`
+- `Password: 123456`
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/b52b5003-30ce-4f1a-ac85-b21ca2d8636e)
+
+
+Clicking on the admin panel option in the top-right corner will take you to the admin panel:
+
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/4fece59c-94ae-4561-adcb-ffc72f7e2f19)
+
+When the "Confirm Meal" button is clicked, it confirms the highest-voted menu to the menu_history database. If the highest-voted food's restaurant has won for three consecutive days.
+Once an admin confirms the food selection, the menu for the day becomes immutable.
+It will select the second-highest voted food:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/d25f6856-85ed-4b11-90da-9fd4f29e5de8)
+
+As observed from the database, Chicken Grill has the most votes, but the selected food is Alu Vorta Vat because it was the second-highest among other restaurants.
+
+<<<<<<< HEAD
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/0f8e7a9c-d9ba-4b75-a93a-e73a5a5a51bd)
+
+
+=======
+>>>>>>> f15bf04354af128a87cd2e6faab01c078903c90a
+Admins can add a restaurant:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/cea6110b-1721-4a26-9143-d7260a160a7e)
+
+And also add a menu:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/c346cdf9-00c7-40d2-9c48-df9fabdcce03)
+
+Here, the admin selects an existing restaurant from the dropdown, fills out the form, and adds the menu.
+
+<<<<<<< HEAD
+Admins or any normal users can log out at any time by clicking log out:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/252deca3-85e0-4c7a-b3a4-11b1f7ffdf13)
+
+Log out will redirect to log in page.
+=======
+Admins or any normal users can log out at any time:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/252deca3-85e0-4c7a-b3a4-11b1f7ffdf13)
+
+>>>>>>> f15bf04354af128a87cd2e6faab01c078903c90a
+
 ## Future Scope
 
 - Implement user roles and permissions for better admin control.

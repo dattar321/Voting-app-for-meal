@@ -7,7 +7,7 @@ This Flask-based web application where users can register, log in, vote for meal
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/Voting-App.git
+    git clone https://github.com/dattar321/Voting-app-for-meal.git
     cd Voting-app-for-meal
     ```
 

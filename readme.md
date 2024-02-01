@@ -162,10 +162,10 @@ After logging in, the home page fetches all available menus from the database to
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/b0cfd93e-1945-43b1-90fb-568a706bd5ed)
 
 
-At the top of the page, there is a section displaying today's selected food.A scheduler is implemented to reset the vote count to 0 after a specified period. If no votes are cast during this time, the system intelligently selects a random menu, ensuring a delightful dining experience for users. 
-The user's username and logout option are on the top-right corner.
+At the top of the page, there is a section displaying today's selected food. The user's username and logout option are on the top-right corner.
+A scheduler is implemented to reset the vote count to 0 after a specified period. If no votes are cast during this time, the system intelligently selects a random menu. 
 
-Menus can be selected on this page, and if selected, the card's color will turn green. A "Submit Vote" button is available at the bottom. However, if the user has already voted today, they won't be able to vote again:
+Menus can be selected on this page, and if selected, the card's color will turn green. A "Submit Vote" button is available at the bottom. However, if the user has already voted today, he/she won't be able to vote again:
 
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/a1d7d46c-37cb-4b05-bd0c-0186ab71c1fc)
 
@@ -175,8 +175,8 @@ After clicking the "Submit" button, the page will appear as follows:
 
 To access the admin panel, log in with the following credentials:
 
-- `Username: admin@bs23.com`
-- `Password: 123456`
+- `Username`: admin@bs23.com
+- `Password`: 123456
 
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/b52b5003-30ce-4f1a-ac85-b21ca2d8636e)
 
@@ -186,16 +186,20 @@ Clicking on the admin panel option in the top-right corner will take you to the 
 
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/4fece59c-94ae-4561-adcb-ffc72f7e2f19)
 
-When the "Confirm Meal" button is clicked, it confirms the highest-voted menu to the menu_history database. If the highest-voted food's restaurant has won for three consecutive days.
-Once an admin confirms the food selection, the menu for the day becomes immutable.
-It will select the second-highest voted food:
-
-![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/d25f6856-85ed-4b11-90da-9fd4f29e5de8)
 
 As observed from the database, Chicken Grill has the most votes, but the selected food is Alu Vorta Vat because it was the second-highest among other restaurants.
 
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/d25f6856-85ed-4b11-90da-9fd4f29e5de8)
+
+When the "Confirm Meal" button is clicked, it confirms the highest-voted menu to the menu_history database. If the highest-voted food's restaurant has won for three consecutive days. It will select the second-highest voted food:
+
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/0f8e7a9c-d9ba-4b75-a93a-e73a5a5a51bd)
 
+Because the first resturent is ordered for two consecutive days:
+
+![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/ae95cf87-3080-4a8e-bcc6-bd14a59e566c)
+
+Once an admin confirms the food selection, the menu for the day becomes immutable.
 
 Admins can add a restaurant:
 
@@ -212,9 +216,6 @@ Admins or any normal users can log out at any time by clicking log out:
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/252deca3-85e0-4c7a-b3a4-11b1f7ffdf13)
 
 Log out will redirect to log in page.
-Admins or any normal users can log out at any time:
-
-![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/252deca3-85e0-4c7a-b3a4-11b1f7ffdf13)
 
 
 ## Future Scope

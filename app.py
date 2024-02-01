@@ -23,6 +23,7 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return db.session.query(Employee).get(int(user_id))
 
+#database classes
 class Employee(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
@@ -56,6 +57,7 @@ class Vote(db.Model):
     user = db.relationship('Employee', backref='votes')
     menu = db.relationship('Menu', backref='votes')
 
+#Forms 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=6, max=20)], render_kw={"placeholder": "Password"})
@@ -88,6 +90,7 @@ class choicesForm(FlaskForm):
         choices.append((i.id,i.name))
     dropdown = SelectField('Choose an option', choices=choices, validators=[validators.InputRequired()])
 
+#routes
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -130,8 +133,7 @@ def submit_vote():
             new_vote = Vote(user_id=user_id, menu_id=menu_id)
             db.session.add(new_vote)
             db.session.commit()
-    highest_voted_menu_id = MenuHistory.query.order_by(MenuHistory.id.desc()).first().menu_id
-    highest_voted_menu = Menu.query.filter_by(id=highest_voted_menu_id).first().name
+    highest_voted_menu = highest_voted_menu = current_menu()
     return render_template('vote.html', user=current_user.username, restaurants=restaurants, all_menus=all_menus, selected_menu = highest_voted_menu,btn=0)
     return redirect(url_for('vote'))
 
@@ -190,8 +192,10 @@ def mealConfirm():
         first = MenuHistory.query.order_by(MenuHistory.datetime.desc()).first().restaurant_id
         second = MenuHistory.query.order_by(MenuHistory.datetime.desc()).offset(1).first().restaurant_id
         if first and second and first == second and first == highest_voted_menu.restaurant_id:
-            highest_voted_menu.vote = 0
-            highest_voted_menu = Menu.query.order_by(Menu.vote.desc()).offset(1).first()
+            k=1
+            while k<3 and first == highest_voted_menu.restaurant_id:
+                highest_voted_menu = Menu.query.order_by(Menu.vote.desc()).offset(k).first()
+                k = k+1
         new_menu_history = MenuHistory(datetime=today_date, menu_id=highest_voted_menu.id, restaurant_id=highest_voted_menu.restaurant_id)
         db.session.add(new_menu_history)
         db.session.commit()
@@ -206,16 +210,23 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+#other functions
 def get_restaurant_and_menus():
     restaurants = Restaurant.query.all()
-    highest_voted_menu_id = MenuHistory.query.order_by(MenuHistory.id.desc()).first().menu_id
-    highest_voted_menu = Menu.query.filter_by(id=highest_voted_menu_id).first().name
+    highest_voted_menu = current_menu()
     all_menus = {}
-
     for restaurant in restaurants:
         menus = Menu.query.filter_by(restaurant_id=restaurant.id).all()
         all_menus[restaurant.id] = menus
     return restaurants,all_menus,highest_voted_menu
+
+def current_menu():
+    highest_voted_menu_id = MenuHistory.query.order_by(MenuHistory.id.desc()).first()
+    if highest_voted_menu_id.datetime.date() == date.today():
+        highest_voted_menu = Menu.query.filter_by(id=highest_voted_menu_id.menu_id).first().name
+    else:
+        highest_voted_menu = Menu.query.order_by(Menu.vote.desc()).first().name
+    return highest_voted_menu
 
 def reset_votes():
     current_datetime = datetime.now()

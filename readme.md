@@ -194,12 +194,9 @@ It will select the second-highest voted food:
 
 As observed from the database, Chicken Grill has the most votes, but the selected food is Alu Vorta Vat because it was the second-highest among other restaurants.
 
-<<<<<<< HEAD
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/0f8e7a9c-d9ba-4b75-a93a-e73a5a5a51bd)
 
 
-=======
->>>>>>> f15bf04354af128a87cd2e6faab01c078903c90a
 Admins can add a restaurant:
 
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/cea6110b-1721-4a26-9143-d7260a160a7e)
@@ -210,18 +207,15 @@ And also add a menu:
 
 Here, the admin selects an existing restaurant from the dropdown, fills out the form, and adds the menu.
 
-<<<<<<< HEAD
 Admins or any normal users can log out at any time by clicking log out:
 
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/252deca3-85e0-4c7a-b3a4-11b1f7ffdf13)
 
 Log out will redirect to log in page.
-=======
 Admins or any normal users can log out at any time:
 
 ![image](https://github.com/dattar321/Voting-app-for-meal/assets/42374695/252deca3-85e0-4c7a-b3a4-11b1f7ffdf13)
 
->>>>>>> f15bf04354af128a87cd2e6faab01c078903c90a
 
 ## Future Scope
 

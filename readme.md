@@ -119,7 +119,7 @@ This Flask-based web application where users can register, log in, vote for meal
 
 1. **Run the application:**
     ```bash
-    python your_app.py
+    python app.py
     ```
 
 2. **Open your web browser and go to [http://localhost:5000](http://localhost:5000)**
